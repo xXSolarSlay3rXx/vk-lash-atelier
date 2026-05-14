@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= settings.businessName %> | Online Buchung</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <nav class="topbar">
+          <div class="brand">
+            <img src="/brand/vk-lash-atelier.png" alt="VK Lash Atelier Logo" class="brand-logo" />
+            <div>
+              <p class="eyebrow">VK Lash Atelier</p>
+              <h1><%= settings.businessName %></h1>
+            </div>
+          </div>
+          <a href="/admin/login" class="ghost-link">Admin</a>
+        </nav>
+
+        <section class="hero-grid">
+          <div class="hero-copy">
+            <p class="pill">Luxury booking experience</p>
+            <h2><%= settings.tagline %></h2>
+            <p class="lede">
+              Zeitlose Eleganz, klares Branding und eine entspannte Buchung in wenigen Sekunden.
+              Kunden brauchen keinen Account und sehen nur freie Termine.
+            </p>
+            <div class="hero-meta">
+              <span><%= settings.contactPhone %></span>
+              <span><%= settings.contactEmail %></span>
+            </div>
+          </div>
+          <div class="hero-card">
+            <img src="/brand/vk-lash-atelier.png" alt="VK Lash Atelier" class="hero-card-logo" />
+            <p class="card-label">Studio Details</p>
+            <h3><%= settings.serviceName %></h3>
+            <p><%= settings.slotDurationMinutes %> Minuten pure Studiozeit</p>
+            <p><%= settings.address %></p>
+          </div>
+        </section>
+      </header>
+
+      <% if (success) { %>
+        <section class="success-banner">
+          Dein Termin wurde eingetragen. Ihr Studio sieht ihn jetzt direkt im System und im Kalenderfeed.
+        </section>
+      <% } %>
+
+      <main class="booking-layout">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Schritt 1</p>
+              <h3>Freien Tag waehlen</h3>
+            </div>
+            <p class="muted"><%= calendar.dates.length %> Tage mit freien Zeiten</p>
+          </div>
+
+          <% if (calendar.dates.length === 0) { %>
+            <p class="empty-state">Aktuell sind noch keine freien Termine hinterlegt.</p>
+          <% } else { %>
+            <div class="date-grid">
+              <% calendar.dates.forEach((day) => { %>
+                <a
+                  href="/?date=<%= day.date %>"
+                  class="date-card <%= day.date === calendar.activeDate ? 'is-active' : '' %>"
+                >
+                  <strong><%= day.label %></strong>
+                  <span><%= day.slotCount %> freie Zeiten</span>
+                </a>
+              <% }) %>
+            </div>
+          <% } %>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Schritt 2</p>
+              <h3>Termin buchen</h3>
+            </div>
+            <% if (calendar.activeDay) { %>
+              <p class="muted"><%= calendar.activeDay.label %></p>
+            <% } %>
+          </div>
+
+          <% if (!calendar.activeDay) { %>
+            <p class="empty-state">Sobald freie Tage eingetragen sind, erscheinen sie hier.</p>
+          <% } else { %>
+            <form action="/book" method="post" class="booking-form">
+              <input type="hidden" name="date" value="<%= calendar.activeDay.date %>" />
+
+              <label>
+                <span>Freie Uhrzeit</span>
+                <select name="startTime" required>
+                  <% calendar.activeDay.slots.forEach((slot) => { %>
+                    <option value="<%= slot.startTime %>"><%= slot.label %></option>
+                  <% }) %>
+                </select>
+              </label>
+
+              <label>
+                <span>Name</span>
+                <input type="text" name="customerName" placeholder="Vor- und Nachname" required />
+              </label>
+
+              <label>
+                <span>Telefon</span>
+                <input type="text" name="customerPhone" placeholder="+49 ..." required />
+              </label>
+
+              <label>
+                <span>Notiz</span>
+                <textarea name="note" rows="4" placeholder="Optional: Wunsch, Rueckfrage, Besonderheiten"></textarea>
+              </label>
+
+              <button type="submit" class="primary-button">Termin verbindlich eintragen</button>
+            </form>
+          <% } %>
+        </section>
+      </main>
+
+      <section class="signature-strip">
+        <div>
+          <p class="eyebrow">Signature Look</p>
+          <h3>Minimalistisch, elegant und ganz auf das Studio abgestimmt.</h3>
+        </div>
+        <p class="muted">
+          Das Buchungserlebnis ist bewusst reduziert gehalten: klare Auswahl, ruhige Typografie
+          und ein Look, der das `VK`-Branding aufgreift.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>

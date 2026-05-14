@@ -1,0 +1,26 @@
+{
+  "settings": {
+    "businessName": "VK Lash Atelier",
+    "tagline": "Elegante Wimpernlooks. Ruhige Studio-Aesthetik. Edle Online-Buchung.",
+    "serviceName": "Lash Appointment",
+    "slotDurationMinutes": 120,
+    "contactPhone": "+49 170 0000000",
+    "contactEmail": "hello@vk-lash-atelier.de",
+    "address": "Musterstrasse 12, 12345 Musterstadt",
+    "calendarSecret": "946562783bec419dfa7cd48ea40c374b256e"
+  },
+  "admin": {
+    "email": "admin@vk-lash-atelier.de",
+    "passwordHash": "ccc0b903bce51fb554262d742d0a282e1f8a87d064f1cf44f8ff5148ca4beb42"
+  },
+  "availability": [
+    {
+      "date": "2026-05-15",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "slotDurationMinutes": 120,
+      "isBlocked": false
+    }
+  ],
+  "bookings": []
+}

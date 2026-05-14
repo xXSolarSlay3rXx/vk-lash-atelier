@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | <%= settings.businessName %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="shell admin-shell">
+      <header class="admin-header">
+        <div class="admin-brand">
+          <img src="/brand/vk-lash-atelier.png" alt="VK Lash Atelier Logo" class="admin-logo" />
+          <div>
+          <p class="eyebrow">Admin Dashboard</p>
+          <h1><%= settings.businessName %></h1>
+          </div>
+        </div>
+        <form action="/admin/logout" method="post">
+          <button type="submit" class="ghost-button">Logout</button>
+        </form>
+      </header>
+
+      <main class="admin-grid">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Branding & Zugang</p>
+              <h3>Studio Einstellungen</h3>
+            </div>
+            <p class="muted">Daten liegen lokal in <%= dataFile %></p>
+          </div>
+
+          <form action="/admin/settings" method="post" class="stack-form">
+            <label><span>Business Name</span><input type="text" name="businessName" value="<%= settings.businessName %>" /></label>
+            <label><span>Tagline</span><input type="text" name="tagline" value="<%= settings.tagline %>" /></label>
+            <label><span>Service Name</span><input type="text" name="serviceName" value="<%= settings.serviceName %>" /></label>
+            <label><span>Terminlaenge</span><input type="number" min="15" step="15" name="slotDurationMinutes" value="<%= settings.slotDurationMinutes %>" /></label>
+            <label><span>Telefon</span><input type="text" name="contactPhone" value="<%= settings.contactPhone %>" /></label>
+            <label><span>E-Mail</span><input type="email" name="contactEmail" value="<%= settings.contactEmail %>" /></label>
+            <label><span>Adresse</span><input type="text" name="address" value="<%= settings.address %>" /></label>
+            <label><span>Admin E-Mail</span><input type="email" name="adminEmail" value="<%= adminEmail %>" placeholder="Neue Admin E-Mail" /></label>
+            <label><span>Neues Passwort</span><input type="password" name="adminPassword" placeholder="Leer lassen, wenn unveraendert" /></label>
+            <button type="submit" class="primary-button">Einstellungen speichern</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Kalender Feed</p>
+              <h3>iPhone verbinden</h3>
+            </div>
+          </div>
+          <p class="muted">
+            Diese URL einmal im iPhone Kalender als abonnierten Kalender einfuegen. Neue Termine
+            erscheinen dann automatisch, sobald der Kalender aktualisiert wird.
+          </p>
+          <code class="feed-box"><%= feedUrl %></code>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Verfuegbarkeit</p>
+              <h3>Freie Tage pflegen</h3>
+            </div>
+          </div>
+
+          <form action="/admin/availability" method="post" class="stack-form">
+            <label><span>Datum</span><input type="date" name="date" required /></label>
+            <label><span>Von</span><input type="time" name="startTime" value="09:00" /></label>
+            <label><span>Bis</span><input type="time" name="endTime" value="18:00" /></label>
+            <label><span>Terminabstand</span><input type="number" min="15" step="15" name="slotDurationMinutes" value="<%= settings.slotDurationMinutes %>" /></label>
+            <label class="checkbox-row"><input type="checkbox" name="isBlocked" /> <span>Ganzer Tag nicht verfuegbar</span></label>
+            <button type="submit" class="primary-button">Tag speichern</button>
+          </form>
+
+          <div class="list-block">
+            <% if (availability.length === 0) { %>
+              <p class="empty-state">Noch keine Tage gepflegt.</p>
+            <% } else { %>
+              <% availability.forEach((item) => { %>
+                <div class="mini-card">
+                  <div>
+                    <strong><%= formatGermanDate(item.date) %></strong>
+                    <p class="muted">
+                      <%= item.isBlocked ? 'Nicht verfuegbar' : `${item.startTime} - ${item.endTime} | alle ${item.slotDurationMinutes} Minuten` %>
+                    </p>
+                  </div>
+                  <form action="/admin/availability/delete" method="post">
+                    <input type="hidden" name="date" value="<%= item.date %>" />
+                    <button type="submit" class="ghost-button">Loeschen</button>
+                  </form>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Buchungen</p>
+              <h3>Kunden Termine</h3>
+            </div>
+          </div>
+
+          <div class="list-block">
+            <% if (bookings.length === 0) { %>
+              <p class="empty-state">Noch keine Buchungen vorhanden.</p>
+            <% } else { %>
+              <% bookings.forEach((booking) => { %>
+                <div class="booking-card">
+                  <div>
+                    <strong><%= booking.customerName %></strong>
+                    <p><%= formatGermanDateTime(booking.date, booking.startTime) %></p>
+                    <p class="muted"><%= booking.customerPhone %></p>
+                    <% if (booking.note) { %>
+                      <p class="muted"><%= booking.note %></p>
+                    <% } %>
+                  </div>
+                  <form action="/admin/bookings/delete" method="post">
+                    <input type="hidden" name="id" value="<%= booking.id %>" />
+                    <button type="submit" class="ghost-button">Entfernen</button>
+                  </form>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

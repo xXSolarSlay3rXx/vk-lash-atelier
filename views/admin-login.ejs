@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | <%= settings.businessName %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <form action="/admin/login" method="post" class="auth-card">
+        <img src="/brand/vk-lash-atelier.png" alt="VK Lash Atelier Logo" class="auth-logo" />
+        <p class="eyebrow">Geschuetzter Bereich</p>
+        <h1>Admin Login</h1>
+        <p class="muted">
+          Nur deine Freundin braucht einen Account. Kunden buchen ohne Registrierung.
+        </p>
+
+        <% if (error) { %>
+          <div class="error-banner"><%= error %></div>
+        <% } %>
+
+        <label>
+          <span>E-Mail</span>
+          <input type="email" name="email" required />
+        </label>
+
+        <label>
+          <span>Passwort</span>
+          <input type="password" name="password" required />
+        </label>
+
+        <button type="submit" class="primary-button">Einloggen</button>
+        <a href="/" class="ghost-link align-left">Zurueck zur Buchung</a>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "lash-booking-studio",
+  "version": "1.0.0",
+  "description": "Eleganter Terminkalender fuer ein Lash Studio mit Admin-Bereich und iPhone-Kalenderfeed.",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "pg": "^8.20.0"
+  }
+}
